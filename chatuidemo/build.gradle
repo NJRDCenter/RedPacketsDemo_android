@@ -1,0 +1,51 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        applicationId "com.hyphenate.chatuidemo"
+        minSdkVersion 14
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+
+    }
+    buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/WALLET.RSA'
+        exclude 'META-INF/WALLET.SF'
+    }
+
+}
+
+repositories {
+    flatDir {
+        dir 'libs'
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    //接入方需要导入的aar包
+    compile(name:'AccountSDK-1.0.0', ext:'aar')
+    compile(name:'jdpay-release', ext:'aar')
+    compile(name:'robile-fileloader-1.0.0', ext:'aar')
+    compile(name:'robile-module-1.0.0', ext:'aar')
+    compile(name:'redpacketslib-release', ext:'aar')
+
+    compile 'com.android.support:support-v4:23.1.1'
+    compile project(':easeui')
+}
