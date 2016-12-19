@@ -26,23 +26,24 @@ public class DemoApplication extends Application {
 	private static DemoApplication instance;
 	// login user name
 	public final String PREF_USERNAME = "username";
-	
+
 	/**
-	 * nickname for current user, the nickname instead of ID be shown when user receive notification from APNs
+	 * nickname for current user, the nickname instead of ID be shown when user
+	 * receive notification from APNs
 	 */
 	public static String currentUserNick = "";
 
 	@Override
 	public void onCreate() {
-//		MultiDex.install(this);
+		// MultiDex.install(this);
 		super.onCreate();
-        applicationContext = this;
-        instance = this;
-        
-        //init demo helper
-        DemoHelper.getInstance().init(applicationContext);
+		applicationContext = this;
+		instance = this;
 
-		RedPacketManager.initContext(this);
+		// init demo helper
+		DemoHelper.getInstance().init(applicationContext);
+
+		RedPacketManager.init(this);
 	}
 
 	public static DemoApplication getInstance() {
@@ -52,6 +53,6 @@ public class DemoApplication extends Application {
 	@Override
 	protected void attachBaseContext(Context base) {
 		super.attachBaseContext(base);
-//		MultiDex.install(this);
+		// MultiDex.install(this);
 	}
 }

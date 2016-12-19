@@ -165,9 +165,8 @@ public class MainActivity extends BaseActivity {
 				config.platformHeadImg = user.getAvatar();
 				config.platformUserName = user.getUsername();
 			}
-			RedPacketManager.init(config);
 			// 从app服务端获取签名
-			auth();
+			auth(config);
 		}
 	}
 
@@ -176,7 +175,7 @@ public class MainActivity extends BaseActivity {
 	/**
 	 * 授权，最多三次
 	 */
-	private void auth() {
+	private void auth(final BaseConfig baseConfig) {
 		if (authTryTime == 0) {
 			return;
 		}
@@ -199,32 +198,32 @@ public class MainActivity extends BaseActivity {
 						}
 						RPTokenParams params = new Gson().fromJson(result,
 								RPTokenParams.class);
-						RedPacketManager.auth(params,
+						RedPacketManager.auth(params, baseConfig,
 								new TokenInvalidCallback() {
-							@Override
-							public void onTokenInvalid() {
-								auth();
-							}
+									@Override
+									public void onTokenInvalid() {
+										auth(baseConfig);
+									}
 
-							@Override
-							public RPTokenParams getTokenParams() {
-								String currentUserName = RPHelper
-										.getCurrentUser();
-								if (TextUtils.isEmpty(currentUserName)) {
-									return null;
-								}
-								String signParams = RequestUtils
-										.requestByHttpGetSync(
-												RequestUtils.SIGN_BASE_URL
-														+ currentUserName);
-								if (TextUtils.isEmpty(signParams)) {
-									return null;
-								}
-								RPTokenParams params = new Gson().fromJson(
-										signParams, RPTokenParams.class);
-								return params;
-							}
-						});
+									@Override
+									public RPTokenParams getTokenParams() {
+										String currentUserName = RPHelper
+												.getCurrentUser();
+										if (TextUtils.isEmpty(currentUserName)) {
+											return null;
+										}
+										String signParams = RequestUtils
+												.requestByHttpGetSync(
+														RequestUtils.SIGN_BASE_URL
+																+ currentUserName);
+										if (TextUtils.isEmpty(signParams)) {
+											return null;
+										}
+										RPTokenParams params = new Gson().fromJson(
+												signParams, RPTokenParams.class);
+										return params;
+									}
+								});
 					}
 
 					@Override
@@ -279,15 +278,15 @@ public class MainActivity extends BaseActivity {
 	 */
 	public void onTabClicked(View view) {
 		switch (view.getId()) {
-		case R.id.btn_conversation:
-			index = 0;
-			break;
-		case R.id.btn_address_list:
-			index = 1;
-			break;
-		case R.id.btn_setting:
-			index = 2;
-			break;
+			case R.id.btn_conversation:
+				index = 0;
+				break;
+			case R.id.btn_address_list:
+				index = 1;
+				break;
+			case R.id.btn_setting:
+				index = 2;
+				break;
 		}
 		if (currentTabIndex != index) {
 			FragmentTransaction trx = getSupportFragmentManager()
@@ -418,7 +417,7 @@ public class MainActivity extends BaseActivity {
 					if (ChatActivity.activityInstance != null
 							&& ChatActivity.activityInstance.toChatUsername != null
 							&& username.equals(
-									ChatActivity.activityInstance.toChatUsername)) {
+							ChatActivity.activityInstance.toChatUsername)) {
 						String st10 = getResources()
 								.getString(R.string.have_you_removed);
 						Toast.makeText(MainActivity.this,
@@ -612,7 +611,7 @@ public class MainActivity extends BaseActivity {
 
 							@Override
 							public void onClick(DialogInterface dialog,
-									int which) {
+												int which) {
 								dialog.dismiss();
 								exceptionBuilder = null;
 								isExceptionDialogShow = false;
@@ -692,7 +691,7 @@ public class MainActivity extends BaseActivity {
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode,
-			@NonNull String[] permissions, @NonNull int[] grantResults) {
+										   @NonNull String[] permissions, @NonNull int[] grantResults) {
 		PermissionsManager.getInstance().notifyPermissionsChange(permissions,
 				grantResults);
 	}

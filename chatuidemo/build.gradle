@@ -38,6 +38,7 @@ repositories {
 }
 
 dependencies {
+    provided 'junit:junit:4.12'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     //接入方需要导入的aar包
     compile(name:'AccountSDK-1.0.0', ext:'aar')
